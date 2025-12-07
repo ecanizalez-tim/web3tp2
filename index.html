@@ -11,44 +11,190 @@
   <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.min.css">
   <!-- Custom CSS -->
   <link rel="stylesheet" href="./src/css/styles.css">
+
+  <link rel="stylesheet" href="./node_modules/maplibre-gl/dist/maplibre-gl.css">
+
 </head>
 <body class="bg-dark text-light">
 
-  <!-- EXEMPLES BIDON (tests) -->
-  <div class="container-fluid py-3">
-    <h1 class="text-center mb-4">HUD Music Lab (Test)</h1>
+  <div id="hud-grid">
 
-    <!-- Test Bootstrap -->
-    <button class="btn btn-primary me-2" id="btn-bootstrap-test">
-      <i class="bi bi-music-note-beamed"></i> Bootstrap + Icon
-    </button>
+    <!-- Bande de data en haut -->
+    <div class="hud-data">
+      <span>BPM: 128</span>
+      <span>Hz: 440</span>
+      <span>dB: -6</span>
+    </div>
 
-    <!-- Zone pour AnimeJS -->
-    <div id="anime-box" style="width:80px; height:80px; background:#0ff; margin-top:20px;"></div>
+    <!-- Colonne gauche -->
+    <div class="hud-osc panel">
+      OSCILLATORS
+    </div>
 
-    <!-- Zone pour ChartJS -->
-    <div class="mt-4" style="max-width:400px;">
+    <div class="hud-spectrum panel">
       <canvas id="chartjs-test"></canvas>
     </div>
+
+    <div class="hud-sources panel">
+      AUDIO SOURCES
+    </div>
+
+    <!-- Centre -->
+<div class="hud-reactor panel">
+  <div class="reactor-header">AUDIO REACTOR</div>
+  <canvas id="reactor-canvas"></canvas>
+</div>
+
+
+<div class="hud-effects panel">
+  <div class="effects-header">EFFECTS PANEL</div>
+
+  <div class="effects-controls btn-group btn-group-sm mt-2" role="group">
+    <button class="btn btn-outline-info" id="btn-play">
+      <i class="bi bi-play-fill"></i> Play
+    </button>
+    <button class="btn btn-outline-warning" id="btn-stop">
+      <i class="bi bi-pause-fill"></i> Pause
+    </button>
+  </div>
+
+  <p class="mt-3 small mb-0">
+    <span class="text-uppercase">Hint:</span>
+    Master slider controls volume.
+  </p>
+</div>
+
+
+<div class="hud-timeline panel">
+  <div class="timeline-header">TIMELINE / WAVEFORM</div>
+  <div class="waveform-bars">
+    <!-- 24 barres, chacune avec un delay différent -->
+    <span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span>
+    <span style="--i:3"></span><span style="--i:4"></span><span style="--i:5"></span>
+    <span style="--i:6"></span><span style="--i:7"></span><span style="--i:8"></span>
+    <span style="--i:9"></span><span style="--i:10"></span><span style="--i:11"></span>
+    <span style="--i:12"></span><span style="--i:13"></span><span style="--i:14"></span>
+    <span style="--i:15"></span><span style="--i:16"></span><span style="--i:17"></span>
+    <span style="--i:18"></span><span style="--i:19"></span><span style="--i:20"></span>
+    <span style="--i:21"></span><span style="--i:22"></span><span style="--i:23"></span>
+  </div>
+</div>
+
+
+    <!-- Colonne droite -->
+<div class="hud-sliders panel">
+  <div class="slider-column">
+
+    <div class="slider-group">
+      <span class="slider-label">
+        <i class="bi bi-volume-up"></i> Master
+      </span>
+      <input type="range" class="form-range hud-range" min="0" max="100" value="75">
+    </div>
+
+    <div class="slider-group">
+      <span class="slider-label">
+        <i class="bi bi-music-note-beamed"></i> Bass
+      </span>
+      <input type="range" class="form-range hud-range" min="0" max="100" value="60">
+    </div>
+
+    <div class="slider-group">
+      <span class="slider-label">
+        <i class="bi bi-soundwave"></i> Mid
+      </span>
+      <input type="range" class="form-range hud-range" min="0" max="100" value="50">
+    </div>
+
+    <div class="slider-group">
+      <span class="slider-label">
+        <i class="bi bi-lightning-charge"></i> Treble
+      </span>
+      <input type="range" class="form-range hud-range" min="0" max="100" value="40">
+    </div>
+
+  </div>
+</div>
+
+
+  <div class="hud-knobs panel">
+  <div class="knobs-grid">
+
+    <div class="knob-group">
+      <div class="knob" data-label="Filter">
+        <div class="knob-indicator"></div>
+      </div>
+      <span class="knob-label">Filter</span>
+      <span class="knob-value">70</span>
+      <input type="range" class="knob-input" min="0" max="100" value="70">
+    </div>
+
+    <div class="knob-group">
+      <div class="knob" data-label="Attack">
+        <div class="knob-indicator"></div>
+      </div>
+      <span class="knob-label">Attack</span>
+      <span class="knob-value">40</span>
+      <input type="range" class="knob-input" min="0" max="100" value="40">
+    </div>
+
+    <div class="knob-group">
+      <div class="knob" data-label="Release">
+        <div class="knob-indicator"></div>
+      </div>
+      <span class="knob-label">Release</span>
+      <span class="knob-value">55</span>
+      <input type="range" class="knob-input" min="0" max="100" value="55">
+    </div>
+
+  </div>
+</div>
+
+
+    <div class="hud-presets panel">
+      PRESETS
+    </div>
+
+    <!-- Carte -->
+<div class="hud-map panel">
+  <div class="map-header">MAP (STREAM SOURCES)</div>
+  <div id="hud-map-container"></div>
+</div>
+
+
   </div>
 
   <!-- IMPORTMAP pour animejs & chart.js -->
-  <script type="importmap">
-    {
-      "imports": {
-        "animejs": "./node_modules/animejs/lib/anime.es.js",
-        "chart.js": "./node_modules/chart.js/dist/chart.esm.js",
-        "@kurkle/color": "./node_modules/@kurkle/color/dist/color.esm.js"
-      }
-    }
-  </script>
+<script type="importmap">
+{
+  "imports": {
+    "animejs": "./node_modules/animejs/lib/anime.es.js",
+    "chart.js": "./node_modules/chart.js/dist/chart.js",
+    "@kurkle/color": "./node_modules/@kurkle/color/dist/color.esm.js"
+  }
+}
+</script>
+
+
 
   <!-- JS modules -->
   <script src="./src/js/animejs.js" type="module"></script>
   <script src="./src/js/chartjs.js" type="module"></script>
 
-  <!-- Bootstrap JS (non-module, defer) -->
+  <!-- Tone.js global + logique audio -->
+  <script src="./node_modules/tone/build/Tone.js"></script>
+  <script src="./src/js/tonejs.js" defer></script>
+
+  <!-- MapLibre global + logique map -->
+  <script src="./node_modules/maplibre-gl/dist/maplibre-gl.js"></script>
+  <script src="./src/js/maplibre.js" defer></script>
+
+  <!-- Bootstrap + autres effets -->
   <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
   <script src="./src/js/bootstrap.js" defer></script>
+  <script src="./src/js/vfx.js" defer></script>
 </body>
 </html>
+
+
+

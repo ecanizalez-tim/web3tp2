@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "animejs": "^4.2.2",
+    "animejs": "^3.2.1",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
-    "chart.js": "^4.5.1"
+    "chart.js": "^4.5.1",
+    "maplibre-gl": "^5.14.0",
+    "tone": "^15.1.22"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
