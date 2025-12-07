@@ -1,0 +1,6 @@
+node_modules
+.DS_Store
+
+git add .
+git commit -m "Initial project structure for TP2 HUD"
+git push
