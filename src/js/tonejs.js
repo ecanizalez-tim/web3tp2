@@ -126,6 +126,17 @@ btnPlay.addEventListener("click", async () => {
       </div>
     `;
 
+  const presetsPanel = document.querySelector(".hud-presets.panel");
+  if (presetsPanel) {
+    presetsPanel.innerHTML = `
+      <div class="presets-header">PRESETS</div>
+      <div class="btn-group btn-group-sm mt-2">
+        <button class="btn btn-outline-info" data-preset="chill">Chill</button>
+        <button class="btn btn-outline-warning" data-preset="drive">Drive</button>
+        <button class="btn btn-outline-danger" data-preset="glitch">Glitch</button>
+      </div>
+    `;
+
     const applyPresetValues = (vol, filt, atk, rel) => {
       if (masterSlider) masterSlider.value = vol;
       if (filterInput) filterInput.value = filt;
@@ -137,6 +148,33 @@ btnPlay.addEventListener("click", async () => {
       if (attackInput) attackInput.dispatchEvent(new Event("input"));
       if (releaseInput) releaseInput.dispatchEvent(new Event("input"));
     };
+
+    // ➕ nouvelle fonction : change les classes de thème sur #hud-grid
+    const setPresetTheme = (name) => {
+      const grid = document.getElementById("hud-grid");
+      if (!grid) return;
+      grid.classList.remove("preset-chill", "preset-drive", "preset-glitch");
+      if (name) {
+        grid.classList.add(`preset-${name}`);
+      }
+    };
+
+    presetsPanel.querySelectorAll("button[data-preset]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const p = btn.getAttribute("data-preset");
+        if (p === "chill") {
+          applyPresetValues(55, 40, 40, 60);
+        } else if (p === "drive") {
+          applyPresetValues(80, 80, 20, 30);
+        } else if (p === "glitch") {
+          applyPresetValues(70, 65, 10, 15);
+        }
+
+        setPresetTheme(p);
+      });
+    });
+  }
+
 
     presetsPanel.querySelectorAll("button[data-preset]").forEach(btn => {
       btn.addEventListener("click", () => {

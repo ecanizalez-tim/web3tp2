@@ -98,3 +98,14 @@ document.addEventListener("DOMContentLoaded", () => {
     draw();
   }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const sourceItems = document.querySelectorAll(".source-item");
+  sourceItems.forEach(item => {
+    item.addEventListener("click", () => {
+      sourceItems.forEach(i => i.classList.remove("active"));
+      item.classList.add("active");
+    });
+  });
+});
+

@@ -27,23 +27,105 @@
     </div>
 
     <!-- Colonne gauche -->
-    <div class="hud-osc panel">
-      OSCILLATORS
+<div class="hud-osc panel">
+  <div class="osc-header">OSCILLATORS</div>
+
+  <div class="osc-list">
+    <div class="osc-row">
+      <span class="osc-label">OSC 1</span>
+      <div class="osc-waves">
+        <button class="btn btn-xs btn-outline-info osc-btn active">Sine</button>
+        <button class="btn btn-xs btn-outline-info osc-btn">Square</button>
+        <button class="btn btn-xs btn-outline-info osc-btn">Saw</button>
+      </div>
+      <div class="osc-meter">
+        <span></span><span></span><span></span><span></span>
+      </div>
     </div>
+
+    <div class="osc-row">
+      <span class="osc-label">OSC 2</span>
+      <div class="osc-waves">
+        <button class="btn btn-xs btn-outline-info osc-btn">Sine</button>
+        <button class="btn btn-xs btn-outline-info osc-btn active">Square</button>
+        <button class="btn btn-xs btn-outline-info osc-btn">Saw</button>
+      </div>
+      <div class="osc-meter">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <div class="osc-row">
+      <span class="osc-label">OSC 3</span>
+      <div class="osc-waves">
+        <button class="btn btn-xs btn-outline-info osc-btn">Sine</button>
+        <button class="btn btn-xs btn-outline-info osc-btn">Square</button>
+        <button class="btn btn-xs btn-outline-info osc-btn active">Saw</button>
+      </div>
+      <div class="osc-meter">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     <div class="hud-spectrum panel">
       <canvas id="chartjs-test"></canvas>
     </div>
 
-    <div class="hud-sources panel">
-      AUDIO SOURCES
-    </div>
+<div class="hud-sources panel">
+  <div class="sources-header">AUDIO SOURCES</div>
+
+  <ul class="sources-list">
+    <li class="source-item active">
+      <div class="source-main">
+        <div class="source-name">STREAM-01</div>
+        <div class="source-meta">Synthwave // 128 BPM</div>
+      </div>
+      <div class="source-status">
+        <span class="status-dot"></span>
+        LIVE
+      </div>
+    </li>
+
+    <li class="source-item">
+      <div class="source-main">
+        <div class="source-name">STREAM-02</div>
+        <div class="source-meta">Lo-Fi // 90 BPM</div>
+      </div>
+      <div class="source-status muted">
+        <span class="status-dot"></span>
+        MUTE
+      </div>
+    </li>
+
+    <li class="source-item">
+      <div class="source-main">
+        <div class="source-name">STREAM-03</div>
+        <div class="source-meta">Drum & Bass // 172 BPM</div>
+      </div>
+      <div class="source-status standby">
+        <span class="status-dot"></span>
+        STANDBY
+      </div>
+    </li>
+  </ul>
+
+  <div class="sources-activity">
+    <div class="activity-line"></div>
+  </div>
+</div>
+
 
     <!-- Centre -->
 <div class="hud-reactor panel">
   <div class="reactor-header">AUDIO REACTOR</div>
   <canvas id="reactor-canvas"></canvas>
+  <!-- ZDog orbit -->
+  <div id="reactor-orbit"></div>
 </div>
+
 
 
 <div class="hud-effects panel">
@@ -138,14 +220,24 @@
       <input type="range" class="knob-input" min="0" max="100" value="40">
     </div>
 
-    <div class="knob-group">
-      <div class="knob" data-label="Release">
-        <div class="knob-indicator"></div>
-      </div>
-      <span class="knob-label">Release</span>
-      <span class="knob-value">55</span>
-      <input type="range" class="knob-input" min="0" max="100" value="55">
-    </div>
+<div class="knob-group" data-bs-toggle="tooltip" title="Filter cutoff frequency">
+  <div class="knob">...</div>
+  <span class="knob-label">FILTER</span>
+  ...
+</div>
+
+<div class="knob-group" data-bs-toggle="tooltip" title="Envelope attack time">
+  <div class="knob">...</div>
+  <span class="knob-label">ATTACK</span>
+  ...
+</div>
+
+<div class="knob-group" data-bs-toggle="tooltip" title="Envelope release time">
+  <div class="knob">...</div>
+  <span class="knob-label">RELEASE</span>
+  ...
+</div>
+
 
   </div>
 </div>
@@ -175,8 +267,6 @@
 }
 </script>
 
-
-
   <!-- JS modules -->
   <script src="./src/js/animejs.js" type="module"></script>
   <script src="./src/js/chartjs.js" type="module"></script>
@@ -189,12 +279,13 @@
   <script src="./node_modules/maplibre-gl/dist/maplibre-gl.js"></script>
   <script src="./src/js/maplibre.js" defer></script>
 
+  <!-- ZDog global + logique ZDog -->
+  <script src="./node_modules/zdog/dist/zdog.umd.js"></script>
+  <script src="./src/js/zdog.js" defer></script>
+
   <!-- Bootstrap + autres effets -->
   <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
   <script src="./src/js/bootstrap.js" defer></script>
   <script src="./src/js/vfx.js" defer></script>
 </body>
 </html>
-
-
-
