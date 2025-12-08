@@ -314,12 +314,13 @@ body {
 /* Orbit ZDog dans le reactor */
 #reactor-orbit {
   position: absolute;
-  right: 20px;
-  top: 32px;
+  right: 18px;
+  top: 30px;
   width: 80px;
   height: 80px;
   pointer-events: none;
-  filter: drop-shadow(0 0 10px rgba(0, 246, 255, 0.8));
+  box-shadow: 0 0 18px rgba(0, 255, 255, 0.6);
+  border-radius: 50%;
 }
 
 /* --- TIMELINE / WAVEFORM --- */
