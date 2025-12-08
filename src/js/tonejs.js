@@ -1,5 +1,3 @@
-// Tone.js global (chargé via <script src="./node_modules/tone/build/Tone.js">)
-
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof Tone === "undefined") {
     console.error("Tone n'est pas chargé.");
@@ -12,8 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!btnPlay || !btnStop) return;
 
-  // --- SYNTHS & CHAÎNE AUDIO ---
-
   const synthKick = new Tone.Synth({
     oscillator: { type: "sine" },
     envelope: { attack: 0.001, decay: 0.2, sustain: 0, release: 0.2 },
@@ -24,12 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
     envelope: { attack: 0.001, decay: 0.05, sustain: 0, release: 0.08 },
   });
 
-  // Filtre commun
   const filter = new Tone.Filter(800, "lowpass").toDestination();
   synthKick.connect(filter);
   synthHat.connect(filter);
 
-  // Loop rythmique
   const loop = new Tone.Loop((time) => {
     synthKick.triggerAttackRelease("C2", "8n", time);
     synthHat.triggerAttackRelease("C5", "16n", time + Tone.Time("8n"));
@@ -40,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const setWaveformPlaying = (isPlaying) => {
     if (!waveformEl) return;
     if (isPlaying) {
-      // reset l'anim pour qu'elle reparte à chaque Play
+
       waveformEl.classList.remove("playing");
       void waveformEl.offsetWidth;
       waveformEl.classList.add("playing");
@@ -49,11 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // --- PLAY / PAUSE ---
-
   btnPlay.addEventListener("click", async () => {
-    await Tone.start(); // nécessaire pour le son (Chrome autoplay)
-
+    await Tone.start(); 
     if (!started) {
       loop.start(0);
       started = true;
@@ -68,42 +59,36 @@ document.addEventListener("DOMContentLoaded", () => {
     setWaveformPlaying(false);
   });
 
-  // --- MASTER VOLUME (slider en haut des sliders) ---
-
   const masterSlider = document.querySelector(
     ".hud-sliders .slider-group:first-child .hud-range"
   );
 
   if (masterSlider) {
     const updateVolume = () => {
-      const value = Number(masterSlider.value); // 0–100
-      const gain = (value - 50) / 50; // -1 à +1
-      Tone.Destination.volume.value = gain * 10; // -10dB à +10dB
+      const value = Number(masterSlider.value); 
+      const gain = (value - 50) / 50;
+      Tone.Destination.volume.value = gain * 10; 
     };
 
     updateVolume();
     masterSlider.addEventListener("input", updateVolume);
   }
 
-  // --- KNOBS : Filter / Attack / Release ---
-
   const knobGroups = document.querySelectorAll(".knob-group");
   const filterInput = knobGroups[0]?.querySelector(".knob-input");
   const attackInput = knobGroups[1]?.querySelector(".knob-input");
   const releaseInput = knobGroups[2]?.querySelector(".knob-input");
 
-  // filtre
   if (filterInput) {
     const updateFilter = () => {
-      const v = Number(filterInput.value); // 0–100
-      const freq = 200 + (v / 100) * 6000; // 200–6200 Hz
+      const v = Number(filterInput.value); 
+      const freq = 200 + (v / 100) * 6000; 
       filter.frequency.value = freq;
     };
     updateFilter();
     filterInput.addEventListener("input", updateFilter);
   }
 
-  // envelopes
   const updateEnvelope = () => {
     const atk = attackInput ? (Number(attackInput.value) / 100) * 0.4 + 0.001 : 0.01;
     const rel = releaseInput ? (Number(releaseInput.value) / 100) * 0.8 + 0.05 : 0.2;
@@ -120,8 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateEnvelope();
   }
 
-  // --- ROTATION VISUELLE DES KNOBS ---
-
 const knobConfigs = [
   { rangeId: "filter-range", valueId: "filter-value", knobSelector: "[data-knob='filter']" },
   { rangeId: "attack-range", valueId: "attack-value", knobSelector: "[data-knob='attack']" },
@@ -136,10 +119,9 @@ knobConfigs.forEach(({ rangeId, valueId, knobSelector }) => {
   if (!range || !valueEl || !knob) return;
 
   const updateKnob = () => {
-    const val = Number(range.value);  // 0–100
+    const val = Number(range.value);
     valueEl.textContent = val;
 
-    // 0–100 → 0° à 360°
     const angle = (val / 100) * 360;
     knob.style.setProperty("--angle", `${angle}deg`);
   };
@@ -147,9 +129,6 @@ knobConfigs.forEach(({ rangeId, valueId, knobSelector }) => {
   range.addEventListener("input", updateKnob);
   updateKnob();
 });
-
-
-  // --- PRESETS ---
 
   const applyPresetValues = (vol, filt, atk, rel) => {
     if (masterSlider) {

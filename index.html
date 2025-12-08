@@ -5,11 +5,11 @@
   <title>TP2 – Futuristic Music HUD</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Bootstrap CSS -->
+  
   <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
-  <!-- Bootstrap Icons -->
+  
   <link rel="stylesheet" href="./node_modules/bootstrap-icons/font/bootstrap-icons.min.css">
-  <!-- Custom CSS -->
+  
   <link rel="stylesheet" href="./src/css/styles.css">
 
   <link rel="stylesheet" href="./node_modules/maplibre-gl/dist/maplibre-gl.css">
@@ -19,14 +19,14 @@
 
   <div id="hud-grid">
 
-    <!-- Bande de data en haut -->
+    
     <div class="hud-data">
       <span>BPM: 128</span>
       <span>Hz: 440</span>
       <span>dB: -6</span>
     </div>
 
-    <!-- Colonne gauche -->
+    
 <div class="hud-osc panel">
   <div class="osc-header">OSCILLATORS</div>
 
@@ -117,11 +117,11 @@
   </div>
 </div>
 
-    <!-- Centre -->
+    
 <div class="hud-reactor panel">
   <div class="reactor-header">AUDIO REACTOR</div>
   <canvas id="reactor-canvas"></canvas>
-<!-- ZDog orbit -->
+
 <canvas id="reactor-orbit" width="80" height="80"></canvas>
 
 </div>
@@ -147,7 +147,7 @@
 <div class="hud-timeline panel">
   <div class="timeline-header">TIMELINE / WAVEFORM</div>
   <div class="waveform-bars">
-    <!-- 24 barres, chacune avec un delay différent -->
+    
     <span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span>
     <span style="--i:3"></span><span style="--i:4"></span><span style="--i:5"></span>
     <span style="--i:6"></span><span style="--i:7"></span><span style="--i:8"></span>
@@ -159,8 +159,6 @@
   </div>
 </div>
 
-    <!-- Colonne droite -->
-<!-- Colonne droite -->
 <div class="hud-sliders panel">
   <div class="slider-column">
 
@@ -210,7 +208,7 @@
   <div class="knobs-header">FILTER ENVELOPE</div>
   <div class="knobs-grid">
 
-    <!-- FILTER -->
+    
     <div class="knob-group" data-bs-toggle="tooltip" title="Filter cutoff frequency">
       <div class="knob" data-knob="filter">
         <div class="knob-indicator"></div>
@@ -227,7 +225,7 @@
       />
     </div>
 
-    <!-- ATTACK -->
+    
     <div class="knob-group" data-bs-toggle="tooltip" title="Envelope attack time">
       <div class="knob" data-knob="attack">
         <div class="knob-indicator"></div>
@@ -244,7 +242,7 @@
       />
     </div>
 
-    <!-- RELEASE -->
+    
     <div class="knob-group" data-bs-toggle="tooltip" title="Envelope release time">
       <div class="knob" data-knob="release">
         <div class="knob-indicator"></div>
@@ -279,7 +277,7 @@
 </div>
 
 
-  <!-- IMPORTMAP pour animejs & chart.js -->
+  
 <script type="importmap">
 {
   "imports": {
@@ -290,23 +288,23 @@
 }
 </script>
 
-  <!-- JS modules -->
+  
   <script src="./src/js/animejs.js" type="module"></script>
   <script src="./src/js/chartjs.js" type="module"></script>
 
-  <!-- Tone.js global + logique audio -->
+  
   <script src="./node_modules/tone/build/Tone.js"></script>
   <script src="./src/js/tonejs.js" defer></script>
 
-  <!-- MapLibre global + logique map -->
+  
   <script src="./node_modules/maplibre-gl/dist/maplibre-gl.js"></script>
   <script src="./src/js/maplibre.js" defer></script>
 
-  <!-- ZDog global + logique ZDog -->
+ 
   <script src="./node_modules/zdog/dist/zdog.dist.js"></script>
   <script src="./src/js/zdog.js" defer></script>
 
-  <!-- Bootstrap + autres effets -->
+  
   <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
   <script src="./src/js/bootstrap.js" defer></script>
   <script src="./src/js/vfx.js" defer></script>

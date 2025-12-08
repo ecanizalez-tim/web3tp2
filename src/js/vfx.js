@@ -10,23 +10,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const updateKnob = () => {
       const value = Number(input.value);
-      // On mappe 0–100 à -135deg → +135deg
+      
       const angle = -135 + (value / 100) * 270;
       knob.style.setProperty("--angle", `${angle}deg`);
       valueEl.textContent = value;
     };
 
-    // Init
+    
     updateKnob();
-    // Sur changement
+    
     input.addEventListener("input", updateKnob);
   });
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  // ... ton code existant (knobs etc.) ...
-
-  // AUDIO REACTOR
+  
   const reactorCanvas = document.getElementById("reactor-canvas");
   if (reactorCanvas) {
     const ctx = reactorCanvas.getContext("2d");
@@ -55,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const bars = 32;
 
-      // Est-ce que la musique joue ?
+      
       let isPlaying = false;
       if (window.Tone && Tone.Transport) {
         isPlaying = Tone.Transport.state === "started";
@@ -64,15 +62,15 @@ document.addEventListener("DOMContentLoaded", () => {
       for (let i = 0; i < bars; i++) {
         const x = (i + 0.5) * (w / bars);
 
-        // intensité de base selon volume
+        
         let amp = 0.3;
         if (window.Tone && Tone.Destination) {
-          amp = (Tone.Destination.volume.value + 20) / 20; // ~0–1
+          amp = (Tone.Destination.volume.value + 20) / 20; 
         }
 
         const noise = Math.sin(t + i * 0.4) * 0.5 + 0.5;
 
-        // si pas de son → bars basses
+        
         const activity = isPlaying ? 1 : 0.25;
 
         const value = Math.max(
@@ -90,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.fillRect(x - 4, y, 8, barHeight);
       }
 
-      t += isPlaying ? 0.03 : 0.01; // plus lent en idle
+      t += isPlaying ? 0.03 : 0.01;
       requestAnimationFrame(draw);
     };
 

@@ -1,5 +1,3 @@
-// MapLibre global (chargé via <script src="./node_modules/maplibre-gl/dist/maplibre-gl.js">)
-
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof maplibregl === "undefined") {
     console.error("MapLibre n'est pas chargé.");
@@ -12,13 +10,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const map = new maplibregl.Map({
     container: "hud-map-container",
     style: "https://demotiles.maplibre.org/style.json",
-    center: [-73.56, 45.5], // Montréal 💙
+    center: [-73.56, 45.5], 
     zoom: 2.5
   });
 
   map.addControl(new maplibregl.NavigationControl(), "top-right");
 
-  // Quelques "streams" fictifs
   const points = [
     { lng: -73.56, lat: 45.5, label: "Montreal" },
     { lng: -0.13, lat: 51.5, label: "London" },

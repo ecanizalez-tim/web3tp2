@@ -1,4 +1,3 @@
-// src/js/zdog.js
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof Zdog === "undefined") {
     console.error("ZDog n'est pas chargé.");
@@ -15,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     zoom: 1.6,
   });
 
-  // anneau principal
+
   new Zdog.Ellipse({
     addTo: illo,
     diameter: 40,
@@ -23,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     color: "#00f6ff",
   });
 
-  // anneau interne
+  
   new Zdog.Ellipse({
     addTo: illo,
     diameter: 22,
@@ -32,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     translate: { z: 6 },
   });
 
-  // petit satellite
+  
   const satellite = new Zdog.Shape({
     addTo: illo,
     stroke: 5,
@@ -46,10 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
       isPlaying = Tone.Transport.state === "started";
     }
 
-    // rotation de l’orbite
+    
     illo.rotate.y += isPlaying ? 0.06 : 0.02;
 
-    // léger wobble du satellite
+    
     satellite.translate.y = -8 + Math.sin(Date.now() / 300) * 2;
 
     illo.updateRenderGraph();
