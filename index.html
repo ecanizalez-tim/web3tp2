@@ -159,95 +159,124 @@
 </div>
 
     <!-- Colonne droite -->
+<!-- Colonne droite -->
 <div class="hud-sliders panel">
   <div class="slider-column">
 
     <div class="slider-group">
-      <span class="slider-label">
-        <i class="bi bi-volume-up"></i> Master
-      </span>
-      <input type="range" class="form-range hud-range" min="0" max="100" value="75">
+      <div class="slider-label">
+        <i class="bi bi-volume-up"></i>
+        MASTER
+      </div>
+      <input
+        type="range"
+        class="form-range hud-range"
+        id="master-range"
+        min="0"
+        max="100"
+        value="70"
+      />
     </div>
 
     <div class="slider-group">
-      <span class="slider-label">
-        <i class="bi bi-music-note-beamed"></i> Bass
-      </span>
-      <input type="range" class="form-range hud-range" min="0" max="100" value="60">
+      <div class="slider-label">
+        <i class="bi bi-music-note-beamed"></i>
+        BASS
+      </div>
+      <input type="range" class="form-range hud-range" min="0" max="100" value="60" />
     </div>
 
     <div class="slider-group">
-      <span class="slider-label">
-        <i class="bi bi-soundwave"></i> Mid
-      </span>
-      <input type="range" class="form-range hud-range" min="0" max="100" value="50">
+      <div class="slider-label">
+        <i class="bi bi-soundwave"></i>
+        MID
+      </div>
+      <input type="range" class="form-range hud-range" min="0" max="100" value="45" />
     </div>
 
     <div class="slider-group">
-      <span class="slider-label">
-        <i class="bi bi-lightning-charge"></i> Treble
-      </span>
-      <input type="range" class="form-range hud-range" min="0" max="100" value="40">
+      <div class="slider-label">
+        <i class="bi bi-lightning-charge"></i>
+        TREBLE
+      </div>
+      <input type="range" class="form-range hud-range" min="0" max="100" value="35" />
     </div>
 
   </div>
 </div>
 
-  <div class="hud-knobs panel">
+<div class="hud-knobs panel">
+  <div class="knobs-header">FILTER ENVELOPE</div>
   <div class="knobs-grid">
 
-    <div class="knob-group">
-      <div class="knob" data-label="Filter">
+    <!-- FILTER -->
+    <div class="knob-group" data-bs-toggle="tooltip" title="Filter cutoff frequency">
+      <div class="knob" data-knob="filter">
         <div class="knob-indicator"></div>
       </div>
-      <span class="knob-label">Filter</span>
-      <span class="knob-value">70</span>
-      <input type="range" class="knob-input" min="0" max="100" value="70">
+      <span class="knob-label">FILTER</span>
+      <span class="knob-value" id="filter-value">70</span>
+      <input
+        type="range"
+        class="knob-input"
+        id="filter-range"
+        min="0"
+        max="100"
+        value="70"
+      />
     </div>
 
-    <div class="knob-group">
-      <div class="knob" data-label="Attack">
+    <!-- ATTACK -->
+    <div class="knob-group" data-bs-toggle="tooltip" title="Envelope attack time">
+      <div class="knob" data-knob="attack">
         <div class="knob-indicator"></div>
       </div>
-      <span class="knob-label">Attack</span>
-      <span class="knob-value">40</span>
-      <input type="range" class="knob-input" min="0" max="100" value="40">
+      <span class="knob-label">ATTACK</span>
+      <span class="knob-value" id="attack-value">40</span>
+      <input
+        type="range"
+        class="knob-input"
+        id="attack-range"
+        min="0"
+        max="100"
+        value="40"
+      />
     </div>
 
-<div class="knob-group" data-bs-toggle="tooltip" title="Filter cutoff frequency">
-  <div class="knob">...</div>
-  <span class="knob-label">FILTER</span>
-  ...
-</div>
-
-<div class="knob-group" data-bs-toggle="tooltip" title="Envelope attack time">
-  <div class="knob">...</div>
-  <span class="knob-label">ATTACK</span>
-  ...
-</div>
-
-<div class="knob-group" data-bs-toggle="tooltip" title="Envelope release time">
-  <div class="knob">...</div>
-  <span class="knob-label">RELEASE</span>
-  ...
-</div>
-
+    <!-- RELEASE -->
+    <div class="knob-group" data-bs-toggle="tooltip" title="Envelope release time">
+      <div class="knob" data-knob="release">
+        <div class="knob-indicator"></div>
+      </div>
+      <span class="knob-label">RELEASE</span>
+      <span class="knob-value" id="release-value">60</span>
+      <input
+        type="range"
+        class="knob-input"
+        id="release-range"
+        min="0"
+        max="100"
+        value="60"
+      />
+    </div>
 
   </div>
 </div>
 
-    <div class="hud-presets panel">
-      PRESETS
-    </div>
+<div class="hud-presets panel">
+  <div class="presets-header">PRESETS</div>
+  <div class="btn-group btn-group-sm mt-2">
+    <button class="btn btn-outline-info" data-preset="chill">Chill</button>
+    <button class="btn btn-outline-warning" data-preset="drive">Drive</button>
+    <button class="btn btn-outline-danger" data-preset="glitch">Glitch</button>
+  </div>
+</div>
 
-    <!-- Carte -->
 <div class="hud-map panel">
   <div class="map-header">MAP (STREAM SOURCES)</div>
   <div id="hud-map-container"></div>
 </div>
 
-
-  </div>
 
   <!-- IMPORTMAP pour animejs & chart.js -->
 <script type="importmap">
@@ -273,7 +302,7 @@
   <script src="./src/js/maplibre.js" defer></script>
 
   <!-- ZDog global + logique ZDog -->
-  <script src="./node_modules/zdog/dist/zdog.umd.js"></script>
+  <script src="./node_modules/zdog/dist/zdog.dist.js"></script>
   <script src="./src/js/zdog.js" defer></script>
 
   <!-- Bootstrap + autres effets -->

@@ -1,5 +1,4 @@
-// Petit objet ZDog qui tourne dans AUDIO REACTOR
-
+// src/js/zdog.js
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof Zdog === "undefined") {
     console.error("ZDog n'est pas chargé.");
@@ -13,42 +12,46 @@ document.addEventListener("DOMContentLoaded", () => {
     element: elem,
     dragRotate: false,
     rotate: { x: -0.4, y: 0.6 },
-    zoom: 1.4,
+    zoom: 1.6,
   });
 
-  // Anneau principal
+  // anneau principal
   new Zdog.Ellipse({
     addTo: illo,
-    diameter: 38,
+    diameter: 40,
     stroke: 6,
     color: "#00f6ff",
   });
 
-  // Anneau interne
+  // anneau interne
   new Zdog.Ellipse({
     addTo: illo,
-    diameter: 20,
+    diameter: 22,
     stroke: 3,
     color: "#ff00aa",
     translate: { z: 6 },
   });
 
-  // Petit "satellite"
-  new Zdog.Shape({
+  // petit satellite
+  const satellite = new Zdog.Shape({
     addTo: illo,
-    stroke: 4,
+    stroke: 5,
     color: "#ffffff",
-    translate: { x: 18, y: -6, z: 10 },
+    translate: { x: 20, y: -8, z: 10 },
   });
 
   function animate() {
-    // si le son joue, on peut ajouter un léger spin plus rapide
     let isPlaying = false;
     if (window.Tone && Tone.Transport) {
       isPlaying = Tone.Transport.state === "started";
     }
 
-    illo.rotate.y += isPlaying ? 0.04 : 0.015;
+    // rotation de l’orbite
+    illo.rotate.y += isPlaying ? 0.06 : 0.02;
+
+    // léger wobble du satellite
+    satellite.translate.y = -8 + Math.sin(Date.now() / 300) * 2;
+
     illo.updateRenderGraph();
     requestAnimationFrame(animate);
   }

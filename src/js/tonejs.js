@@ -1,14 +1,12 @@
 // Tone.js global (chargé via <script src="./node_modules/tone/build/Tone.js">)
 
-  const waveformEl = document.querySelector(".waveform-bars");
-
-
 document.addEventListener("DOMContentLoaded", () => {
   if (typeof Tone === "undefined") {
     console.error("Tone n'est pas chargé.");
     return;
   }
 
+  const waveformEl = document.querySelector(".waveform-bars");
   const btnPlay = document.getElementById("btn-play");
   const btnStop = document.getElementById("btn-stop");
 
@@ -18,47 +16,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const synthKick = new Tone.Synth({
     oscillator: { type: "sine" },
-    envelope: { attack: 0.001, decay: 0.2, sustain: 0, release: 0.2 }
+    envelope: { attack: 0.001, decay: 0.2, sustain: 0, release: 0.2 },
   });
 
   const synthHat = new Tone.Synth({
     oscillator: { type: "square" },
-    envelope: { attack: 0.001, decay: 0.05, sustain: 0, release: 0.08 }
+    envelope: { attack: 0.001, decay: 0.05, sustain: 0, release: 0.08 },
   });
 
-  // filtre commun
+  // Filtre commun
   const filter = new Tone.Filter(800, "lowpass").toDestination();
   synthKick.connect(filter);
   synthHat.connect(filter);
 
   // Loop rythmique
-  const loop = new Tone.Loop(time => {
+  const loop = new Tone.Loop((time) => {
     synthKick.triggerAttackRelease("C2", "8n", time);
     synthHat.triggerAttackRelease("C5", "16n", time + Tone.Time("8n"));
   }, "4n");
 
   let started = false;
 
-btnPlay.addEventListener("click", async () => {
-  await Tone.start(); // obligatoire pour le son
+  const setWaveformPlaying = (isPlaying) => {
+    if (!waveformEl) return;
+    if (isPlaying) {
+      // reset l'anim pour qu'elle reparte à chaque Play
+      waveformEl.classList.remove("playing");
+      void waveformEl.offsetWidth;
+      waveformEl.classList.add("playing");
+    } else {
+      waveformEl.classList.remove("playing");
+    }
+  };
 
-  if (!started) {
-    loop.start(0);
-    started = true;
-  }
+  // --- PLAY / PAUSE ---
 
-  Tone.Transport.start();
+  btnPlay.addEventListener("click", async () => {
+    await Tone.start(); // nécessaire pour le son (Chrome autoplay)
 
-  // <-- toujours, à chaque Play
-  if (waveformEl) waveformEl.classList.add("playing");
-});
+    if (!started) {
+      loop.start(0);
+      started = true;
+    }
 
+    Tone.Transport.start();
+    setWaveformPlaying(true);
+  });
 
   btnStop.addEventListener("click", () => {
     Tone.Transport.pause();
-        Tone.Transport.pause();
-    if (waveformEl) waveformEl.classList.remove("playing");
-
+    setWaveformPlaying(false);
   });
 
   // --- MASTER VOLUME (slider en haut des sliders) ---
@@ -69,9 +76,9 @@ btnPlay.addEventListener("click", async () => {
 
   if (masterSlider) {
     const updateVolume = () => {
-      const value = Number(masterSlider.value);     // 0–100
-      const gain = (value - 50) / 50;              // -1 à +1
-      Tone.Destination.volume.value = gain * 10;   // -10 dB à +10 dB
+      const value = Number(masterSlider.value); // 0–100
+      const gain = (value - 50) / 50; // -1 à +1
+      Tone.Destination.volume.value = gain * 10; // -10dB à +10dB
     };
 
     updateVolume();
@@ -98,8 +105,8 @@ btnPlay.addEventListener("click", async () => {
 
   // envelopes
   const updateEnvelope = () => {
-    const atk = attackInput ? Number(attackInput.value) / 100 * 0.4 + 0.001 : 0.01;
-    const rel = releaseInput ? Number(releaseInput.value) / 100 * 0.8 + 0.05 : 0.2;
+    const atk = attackInput ? (Number(attackInput.value) / 100) * 0.4 + 0.001 : 0.01;
+    const rel = releaseInput ? (Number(releaseInput.value) / 100) * 0.8 + 0.05 : 0.2;
 
     synthKick.envelope.attack = atk;
     synthKick.envelope.release = rel;
@@ -113,80 +120,77 @@ btnPlay.addEventListener("click", async () => {
     updateEnvelope();
   }
 
+  // --- ROTATION VISUELLE DES KNOBS ---
+
+const knobConfigs = [
+  { rangeId: "filter-range", valueId: "filter-value", knobSelector: "[data-knob='filter']" },
+  { rangeId: "attack-range", valueId: "attack-value", knobSelector: "[data-knob='attack']" },
+  { rangeId: "release-range", valueId: "release-value", knobSelector: "[data-knob='release']" },
+];
+
+knobConfigs.forEach(({ rangeId, valueId, knobSelector }) => {
+  const range = document.getElementById(rangeId);
+  const valueEl = document.getElementById(valueId);
+  const knob = document.querySelector(knobSelector);
+
+  if (!range || !valueEl || !knob) return;
+
+  const updateKnob = () => {
+    const val = Number(range.value);  // 0–100
+    valueEl.textContent = val;
+
+    // 0–100 → 0° à 360°
+    const angle = (val / 100) * 360;
+    knob.style.setProperty("--angle", `${angle}deg`);
+  };
+
+  range.addEventListener("input", updateKnob);
+  updateKnob();
+});
+
+
   // --- PRESETS ---
 
-  const presetsPanel = document.querySelector(".hud-presets.panel");
-  if (presetsPanel) {
-    presetsPanel.innerHTML = `
-      <div class="presets-header">PRESETS</div>
-      <div class="btn-group btn-group-sm mt-2">
-        <button class="btn btn-outline-info" data-preset="chill">Chill</button>
-        <button class="btn btn-outline-warning" data-preset="drive">Drive</button>
-        <button class="btn btn-outline-danger" data-preset="glitch">Glitch</button>
-      </div>
-    `;
+  const applyPresetValues = (vol, filt, atk, rel) => {
+    if (masterSlider) {
+      masterSlider.value = vol;
+      masterSlider.dispatchEvent(new Event("input"));
+    }
+    if (filterInput) {
+      filterInput.value = filt;
+      filterInput.dispatchEvent(new Event("input"));
+    }
+    if (attackInput) {
+      attackInput.value = atk;
+      attackInput.dispatchEvent(new Event("input"));
+    }
+    if (releaseInput) {
+      releaseInput.value = rel;
+      releaseInput.dispatchEvent(new Event("input"));
+    }
+  };
 
-  const presetsPanel = document.querySelector(".hud-presets.panel");
-  if (presetsPanel) {
-    presetsPanel.innerHTML = `
-      <div class="presets-header">PRESETS</div>
-      <div class="btn-group btn-group-sm mt-2">
-        <button class="btn btn-outline-info" data-preset="chill">Chill</button>
-        <button class="btn btn-outline-warning" data-preset="drive">Drive</button>
-        <button class="btn btn-outline-danger" data-preset="glitch">Glitch</button>
-      </div>
-    `;
+  const setPresetTheme = (name) => {
+    const grid = document.getElementById("hud-grid");
+    if (!grid) return;
+    grid.classList.remove("preset-chill", "preset-drive", "preset-glitch");
+    if (name) grid.classList.add(`preset-${name}`);
+  };
 
-    const applyPresetValues = (vol, filt, atk, rel) => {
-      if (masterSlider) masterSlider.value = vol;
-      if (filterInput) filterInput.value = filt;
-      if (attackInput) attackInput.value = atk;
-      if (releaseInput) releaseInput.value = rel;
+  const presetButtons = document.querySelectorAll("[data-preset]");
+  presetButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const p = btn.getAttribute("data-preset");
 
-      if (masterSlider) masterSlider.dispatchEvent(new Event("input"));
-      if (filterInput) filterInput.dispatchEvent(new Event("input"));
-      if (attackInput) attackInput.dispatchEvent(new Event("input"));
-      if (releaseInput) releaseInput.dispatchEvent(new Event("input"));
-    };
-
-    // ➕ nouvelle fonction : change les classes de thème sur #hud-grid
-    const setPresetTheme = (name) => {
-      const grid = document.getElementById("hud-grid");
-      if (!grid) return;
-      grid.classList.remove("preset-chill", "preset-drive", "preset-glitch");
-      if (name) {
-        grid.classList.add(`preset-${name}`);
+      if (p === "chill") {
+        applyPresetValues(55, 40, 40, 60);
+      } else if (p === "drive") {
+        applyPresetValues(80, 80, 20, 30);
+      } else if (p === "glitch") {
+        applyPresetValues(70, 65, 10, 15);
       }
-    };
 
-    presetsPanel.querySelectorAll("button[data-preset]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const p = btn.getAttribute("data-preset");
-        if (p === "chill") {
-          applyPresetValues(55, 40, 40, 60);
-        } else if (p === "drive") {
-          applyPresetValues(80, 80, 20, 30);
-        } else if (p === "glitch") {
-          applyPresetValues(70, 65, 10, 15);
-        }
-
-        setPresetTheme(p);
-      });
+      setPresetTheme(p);
     });
-  }
-
-
-    presetsPanel.querySelectorAll("button[data-preset]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const p = btn.getAttribute("data-preset");
-        if (p === "chill") {
-          applyPresetValues(55, 40, 40, 60);
-        } else if (p === "drive") {
-          applyPresetValues(80, 80, 20, 30);
-        } else if (p === "glitch") {
-          applyPresetValues(70, 65, 10, 15);
-        }
-      });
-    });
-  }
+  });
 });
